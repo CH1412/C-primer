@@ -1,6 +1,9 @@
 # C++ Primer 中文版(第5版)学习笔记
-参考视频：[[https://www.bilibili.com/video/BV187411u78B?share_source=copy_web]]
+
+[参考视频](https://www.bilibili.com/video/BV187411u78B?share_source=copy_web)
+
 ## 目录：
+
 [[2.6自定义数据结构]]
 
 [[3.1标准库类型string]]

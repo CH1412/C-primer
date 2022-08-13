@@ -1,0 +1,97 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class Sales_item{
+public:
+    //默认构造函数
+    Sales_item():units_sold(0), revenue(0.0)
+    {
+        cout << "default construction" << endl;
+    }
+    Sales_item(const std::string &book) : isbn(book), units_sold(0), revenue(0.0)
+    {
+        cout << "Sales_item(const std::string &book)" << endl;
+    }
+
+    //复制构造函数
+    Sales_item(const Sales_item &orig):isbn(orig.isbn), units_sold(orig.units_sold), revenue(orig.revenue)
+    {
+        cout << "copy construction" << endl;
+    }
+
+    //赋值操作符
+    Sales_item& operator=(const Sales_item &rhs){
+        cout << "operator = " << endl;
+        isbn = rhs.isbn;
+        units_sold = rhs.units_sold;
+        revenue = rhs.revenue;
+        return *this;
+    }
+private:
+    std::string isbn;
+    unsigned units_sold;
+    double revenue;
+
+};
+
+Sales_item foo(Sales_item item){    //传值，会调用赋值操作符
+    Sales_item temp;
+    temp = item;
+    return temp;
+}
+
+class NoName{
+public:
+    NoName():pstring(new std::string), i(0), d(0.0){}
+    NoName(const NoName &other)        //C++默认为 pstring(other.string)，使得创建的新对象与原对象指向相同地方
+        :pstring(new std::string(*(other.pstring))), i(other.i), d(other.d){
+            cout << "NoName Copy Constructor" << endl;
+        }
+    NoName& operator=(const NoName &rhs){
+        cout << "NoName operator = " << endl;
+        pstring = new std::string;
+        *pstring = *(rhs.pstring);
+        
+        i = rhs.i;
+        d = rhs.d;
+        return *this;
+    }
+private:
+    std::string *pstring;
+    int i;
+    double d;
+};
+
+int main()
+{
+    Sales_item a;                   //调用默认构造函数
+    Sales_item b("0-201-78345-X");  //调用第二个构造函数
+
+    Sales_item c(b);                //调用复制构造函数
+    a = b;                          //调用赋值操作符
+
+    Sales_item item = string("9-999-99999-9");  //调用Sales_item(const std::string &book)构造函数
+    cout << "Sales_item foo(Sales_item item)" << endl;
+    Sales_item ret;
+    ret = foo(item);                //将实参赋值到形参时，调用赋值操作符；
+    
+    cout << "vector:" << endl;
+    vector<Sales_item> svec(5);     //调用5次复制构造函数
+
+    cout << "array:" << endl;
+    Sales_item primer_eds[] = {
+        string("0-201-16487-6"),    //调用复制构造函数
+        string("0-201-16487-6"),
+        string("0-201-16487-6"),
+        Sales_item()                //调用默认构造函数
+    };
+
+    cout << "NoName:" << endl;
+    NoName x, y;
+    NoName z(x);
+    x = y;
+    cout << "OK!" << endl;
+    return 0;
+}
